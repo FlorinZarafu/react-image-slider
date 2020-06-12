@@ -1,26 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import data from "./data/data";
+import Card from "./Card";
+import "./App.scss";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+class App extends React.Component {
+  state = {
+    properties: data.properties,
+    property: data.properties[0],
+  };
+  nextProperty = () => {
+    const newIndex = this.state.property.index + 1;
+    this.setState({
+      property: data.properties[newIndex],
+    });
+  };
+  prevProperty = () => {
+    const newIndex = this.state.property.index - 1;
+    this.setState({
+      property: data.properties[newIndex],
+    });
+  };
+  render() {
+    const { properties, property } = this.state;
+    return (
+      <div>
+        <button
+          onClick={() => this.prevProperty()}
+          disabled={property.index === 0}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+          Prev
+        </button>
+        <button
+          onClick={() => this.nextProperty()}
+          disabled={property.index === data.properties.length - 1}
+        >
+          Next
+        </button>
+        <Card property={property} />
+        {/* <div className="cards-slider">
+          <div className="cards-slider-wrapper">
+            {properties.map((property) => (
+              <Card key={property.id} property={property} />
+            ))}
+          </div>
+        </div> */}
+      </div>
+    );
+  }
 }
 
 export default App;
